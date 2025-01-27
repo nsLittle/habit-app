@@ -1,0 +1,178 @@
+swagger: '2.0'
+info:
+  version: 1.0.0
+  title: HabitApp API
+  description: API documentation for HabitApp.
+host: api.habitapp.com
+basePath: /
+schemes:
+  - https
+paths:
+  /auth/signup:
+    post:
+      summary: Sign up a new user
+      description: Creates a new user account.
+      parameters:
+        - in: body
+          name: body
+          required: true
+          schema:
+            type: object
+            properties:
+              full_name:
+                type: string
+              email:
+                type: string
+              phone:
+                type: string
+              profile_photo:
+                type: string
+                format: binary
+              username:
+                type: string
+              password:
+                type: string
+            required:
+              - full_name
+              - email
+              - password
+      responses:
+        '200':
+          description: User created successfully
+          schema:
+            type: object
+            properties:
+              username:
+                type: string
+              profile_photo_url:
+                type: string
+              message:
+                type: string
+  /auth/login:
+    post:
+      summary: User login
+      description: Logs in an existing user.
+      parameters:
+        - in: body
+          name: body
+          required: true
+          schema:
+            type: object
+            properties:
+              email:
+                type: string
+              password:
+                type: string
+            required:
+              - email
+              - password
+      responses:
+        '200':
+          description: Login successful
+          schema:
+            type: object
+            properties:
+              token:
+                type: string
+  /users/{username}:
+    get:
+      summary: Get user profile
+      description: Retrieves profile details for a specific user.
+      parameters:
+        - in: path
+          name: username
+          required: true
+          type: string
+      responses:
+        '200':
+          description: User profile retrieved successfully
+          schema:
+            type: object
+            properties:
+              username:
+                type: string
+              full_name:
+                type: string
+              email:
+                type: string
+              phone:
+                type: string
+              profile_photo_url:
+                type: string
+    patch:
+      summary: Update user profile
+      description: Updates profile details for a specific user.
+      parameters:
+        - in: path
+          name: username
+          required: true
+          type: string
+        - in: body
+          name: body
+          required: true
+          schema:
+            type: object
+            properties:
+              phone:
+                type: string
+              profile_photo:
+                type: string
+                format: binary
+      responses:
+        '200':
+          description: User profile updated successfully
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+  /habits:
+    post:
+      summary: Create a new habit
+      description: Creates a new habit for the authenticated user.
+      parameters:
+        - in: body
+          name: body
+          required: true
+          schema:
+            type: object
+            properties:
+              habit:
+                type: string
+            required:
+              - habit
+      responses:
+        '200':
+          description: Habit created successfully
+          schema:
+            type: object
+            properties:
+              habit_id:
+                type: string
+              message:
+                type: string
+  /habits/{habit_id}/detailed-habit:
+    patch:
+      summary: Update detailed habit
+      description: Adds or updates the detailed habit description.
+      parameters:
+        - in: path
+          name: habit_id
+          required: true
+          type: string
+        - in: body
+          name: body
+          required: true
+          schema:
+            type: object
+            properties:
+              detailed_habit:
+                type: string
+      responses:
+        '200':
+          description: Detailed habit updated successfully
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
