@@ -23,6 +23,16 @@ app.get("/", (req, res) => {
 const authRoutes = require("./routes/authRoutes");
 app.use("/auth", authRoutes);
 
+const userRoutes = require("./routes/userRoutes");
+app.use("/user", userRoutes);
+
+const habitRoutes = require("./routes/habitRoutes");
+app.use("/habits", habitRoutes);
+
+const teamMemberRoutes = require("./routes/teammemberRoutes");
+app.use("/team-members", teamMemberRoutes);
+
+
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
   console.log(`Swagger docs available at http://localhost:${PORT}/api-docs`);

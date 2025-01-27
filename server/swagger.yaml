@@ -39,15 +39,8 @@ paths:
       responses:
         '200':
           description: User created successfully
-          schema:
-            type: object
-            properties:
-              username:
-                type: string
-              profile_photo_url:
-                type: string
-              message:
-                type: string
+        '400':
+          description: Bad request
   /auth/login:
     post:
       summary: User login
@@ -69,11 +62,8 @@ paths:
       responses:
         '200':
           description: Login successful
-          schema:
-            type: object
-            properties:
-              token:
-                type: string
+        '401':
+          description: Invalid credentials
   /users/{username}:
     get:
       summary: Get user profile
@@ -86,19 +76,8 @@ paths:
       responses:
         '200':
           description: User profile retrieved successfully
-          schema:
-            type: object
-            properties:
-              username:
-                type: string
-              full_name:
-                type: string
-              email:
-                type: string
-              phone:
-                type: string
-              profile_photo_url:
-                type: string
+        '404':
+          description: User not found
     patch:
       summary: Update user profile
       description: Updates profile details for a specific user.
@@ -120,12 +99,7 @@ paths:
                 format: binary
       responses:
         '200':
-          description: User profile updated successfully
-          schema:
-            type: object
-            properties:
-              message:
-                type: string
+          description: Profile updated successfully
   /habits:
     post:
       summary: Create a new habit
@@ -142,15 +116,10 @@ paths:
             required:
               - habit
       responses:
-        '200':
+        '201':
           description: Habit created successfully
-          schema:
-            type: object
-            properties:
-              habit_id:
-                type: string
-              message:
-                type: string
+        '400':
+          description: Bad request
   /habits/{habit_id}/detailed-habit:
     patch:
       summary: Update detailed habit
@@ -171,8 +140,40 @@ paths:
       responses:
         '200':
           description: Detailed habit updated successfully
+        '400':
+          description: Bad request
+        '404':
+          description: Habit not found
+  /team-members:
+    post:
+      summary: Add a new team member
+      description: Adds a new team member to a specific habit.
+      parameters:
+        - in: body
+          name: body
+          required: true
           schema:
             type: object
             properties:
-              message:
+              firstName:
                 type: string
+              lastName:
+                type: string
+              email:
+                type: string
+              habit:
+                type: string
+              role:
+                type: string
+                enum:
+                  - cohort
+                  - leader
+            required:
+              - firstName
+              - habit
+              - role
+      responses:
+        '201':
+          description: Team member added successfully
+        '400':
+          description: Bad request
