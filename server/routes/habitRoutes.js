@@ -1,9 +1,11 @@
 const express = require('express');
-const { createHabit, updateDetailedHabit } = require('../controllers/habitController');
+const { createHabit, getUserHabits, updateDetailedHabit, completeHabit } = require('../controllers/habitController');
 const { protect } = require('../middlewares/authMiddleware');
 const router = express.Router();
 
-router.post('/', protect, createHabit);
-router.patch('/:habit_id/detailed-habit', protect, updateDetailedHabit);
+router.post('/:username', protect, createHabit);
+router.get('/:username', protect, getUserHabits);
+router.patch('/:username/:habit_id/detailed-habit', protect, updateDetailedHabit);
+router.patch('/:habit_id/complete', protect, completeHabit);
 
 module.exports = router;

@@ -64,7 +64,7 @@ paths:
           description: Login successful
         '401':
           description: Invalid credentials
-  /users/{username}:
+  /user/{username}:
     get:
       summary: Get user profile
       description: Retrieves profile details for a specific user.
@@ -100,11 +100,28 @@ paths:
       responses:
         '200':
           description: Profile updated successfully
-  /habits:
+    delete:
+      summary: Delete user account
+      description: Deletes a user's account.
+      parameters:
+        - in: path
+          name: username
+          required: true
+          type: string
+      responses:
+        '204':
+          description: User account deleted successfully
+        '404':
+          description: User not found
+  /habits/{username}:
     post:
       summary: Create a new habit
-      description: Creates a new habit for the authenticated user.
+      description: Creates a new habit for the specified user.
       parameters:
+        - in: path
+          name: username
+          required: true
+          type: string
         - in: body
           name: body
           required: true
@@ -120,11 +137,15 @@ paths:
           description: Habit created successfully
         '400':
           description: Bad request
-  /habits/{habit_id}/detailed-habit:
+  /habits/{username}/{habit_id}/detailed-habit:
     patch:
       summary: Update detailed habit
       description: Adds or updates the detailed habit description.
       parameters:
+        - in: path
+          name: username
+          required: true
+          type: string
         - in: path
           name: habit_id
           required: true
@@ -144,11 +165,44 @@ paths:
           description: Bad request
         '404':
           description: Habit not found
-  /team-members:
+  /habits/{username}/{habit_id}/complete:
+    patch:
+      summary: Mark habit as complete
+      description: Marks a user's habit as complete and triggers a follow-up in 3 months.
+      parameters:
+        - in: path
+          name: username
+          required: true
+          type: string
+        - in: path
+          name: habit_id
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Habit marked as complete successfully
+        '404':
+          description: User or habit not found
+  /team-members/{username}:
+    get:
+      summary: Get all team members
+      description: Retrieves all team members for a user.
+      parameters:
+        - in: path
+          name: username
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Team members retrieved successfully
     post:
       summary: Add a new team member
       description: Adds a new team member to a specific habit.
       parameters:
+        - in: path
+          name: username
+          required: true
+          type: string
         - in: body
           name: body
           required: true
@@ -177,3 +231,69 @@ paths:
           description: Team member added successfully
         '400':
           description: Bad request
+    put:
+      summary: Update a team member
+      description: Updates a team member's details.
+      parameters:
+        - in: path
+          name: username
+          required: true
+          type: string
+        - in: body
+          name: body
+          required: true
+          schema:
+            type: object
+            properties:
+              firstName:
+                type: string
+              lastName:
+                type: string
+              email:
+                type: string
+              role:
+                type: string
+                enum:
+                  - cohort
+                  - leader
+      responses:
+        '200':
+          description: Team member updated successfully
+    delete:
+      summary: Delete a team member
+      description: Deletes a team member.
+      parameters:
+        - in: path
+          name: username
+          required: true
+          type: string
+      responses:
+        '204':
+          description: Team member deleted successfully
+  /feedback/{username}:
+    post:
+      summary: Submit feedback
+      description: Allows a team member to submit feedback for a habit.
+      parameters:
+        - in: path
+          name: username
+          required: true
+          type: string
+        - in: body
+          name: body
+          required: true
+          schema:
+            type: object
+            properties:
+              habit:
+                type: string
+              teamMember:
+                type: string
+              feedbackText:
+                type: string
+      responses:
+        '201':
+          description: Feedback submitted successfully
+        '400':
+          description: Bad request
+

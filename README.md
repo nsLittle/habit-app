@@ -24,3 +24,4 @@ This is a Simple Native React Application designed to help users form lasting ha
 2. Type: mongosh
 3. Type: cd server
 4. Type: npm run dev
+5. Type: npx expo start
