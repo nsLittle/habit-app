@@ -3,7 +3,7 @@ const { submitFeedback, getFeedbackForHabit } = require('../controllers/feedback
 const { protect } = require('../middlewares/authMiddleware');
 const router = express.Router();
 
-router.post('/', protect, submitFeedback);
+router.post('/:username', protect, submitFeedback);
 router.get('/:habit_id', protect, getFeedbackForHabit);
 
 module.exports = router;

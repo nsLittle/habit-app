@@ -10,8 +10,8 @@ const router = express.Router();
 
 router.post('/', protect, addTeamMember);
 router.post('/:username', protect, addTeamMember);
-router.get('/', protect, getTeamMembers);
-router.put('/:teamMember_id', protect, updateTeamMember);
-router.delete('/:teamMember_id', protect, deleteTeamMember);
+router.get('/:username', protect, getTeamMembers);
+router.put('/:username/:teamMember_id', protect, updateTeamMember);
+router.delete('/:username/:teamMember_id', protect, deleteTeamMember);
 
 module.exports = router;

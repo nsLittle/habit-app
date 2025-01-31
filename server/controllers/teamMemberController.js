@@ -1,3 +1,4 @@
+const mongoose = require('mongoose');
 const User = require('../models/User'); 
 const TeamMember = require('../models/TeamMember');
 
@@ -44,6 +45,7 @@ exports.addTeamMember = async (req, res) => {
 };
 
 exports.getTeamMembers = async (req, res) => {
+  console.log("I'm getting team members!")
   try {
     const { username } = req.params;
     console.log('Fetching team members for:', username);
@@ -67,26 +69,36 @@ exports.getTeamMembers = async (req, res) => {
 };
 
 exports.updateTeamMember = async (req, res) => {
+  console.log("I'm updating team members!")
+  console.log('req.params:', req.params);
   try {
-    const { teamMember_id } = req.params;
+    const { username, teamMember_id } = req.params;
+    console.log('Username:', username);
+    console.log('Team Member ID:', teamMember_id);
 
-    if (!mongoose.Types.ObjectId.isValid(teamMember_id)) {
-      return res.status(400).json({ message: 'Invalid Team Member ID' });
+    const user = await User.findOne({ username });
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
     }
 
-    const teamMember = await TeamMember.findById(teamMember_id);
+    if (!mongoose.Types.ObjectId.isValid(teamMember_id)) {
+      return res.status(400).json({ message: "Invalid teamMember_id format" });
+    }
+
+    const teamMember = await TeamMember.findOne({ _id: teamMember_id, user: user._id });
     if (!teamMember) {
       return res.status(404).json({ message: 'Team member not found' });
     }
 
-    if (req.user.role !== 'admin' && req.user.id !== teamMember.owner.toString()) {
-      return res.status(403).json({ message: 'Forbidden: You do not have permission to update this team member' });
-    }
-
-    const updatedTeamMember = await TeamMember.findByIdAndUpdate(teamMember_id, req.body, { new: true });
+    const updatedTeamMember = await TeamMember.findOneAndUpdate(
+      { _id: teamMember_id, user: user._id },
+      req.body,
+      { new: true, runValidators: true }
+    );
 
     if (!updatedTeamMember) {
-      return res.status(404).json({ message: 'Team member not found' });
+      return res.status(404).json({ message: 'Team member not updated' });
     }
 
     res.status(200).json({
@@ -94,8 +106,9 @@ exports.updateTeamMember = async (req, res) => {
       teamMember: updatedTeamMember,
     });
   } catch (error) {
-    res.status(500).json({ error: 'Failed to update team member' });
-  }
+    console.error("Error updating team member:", error);
+    res.status(500).json({ error: error.message || "Failed to update team member" });
+}
 };
 
 exports.deleteTeamMember = async (req, res) => {

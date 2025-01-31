@@ -64,6 +64,32 @@ paths:
           description: Login successful
         '401':
           description: Invalid credentials
+  /auth/logout:
+    post:
+      summary: Logout user
+      description: Logs out the user by invalidating the session/token.
+      responses:
+        '200':
+          description: Logged out successfully
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+  /auth/protected-route:
+    get:
+      summary: Protected route
+      description: Returns authentication status and user details.
+      responses:
+        '200':
+          description: User is authenticated
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+              user:
+                type: object
   /user/{username}:
     get:
       summary: Get user profile
@@ -78,115 +104,10 @@ paths:
           description: User profile retrieved successfully
         '404':
           description: User not found
-    patch:
-      summary: Update user profile
-      description: Updates profile details for a specific user.
-      parameters:
-        - in: path
-          name: username
-          required: true
-          type: string
-        - in: body
-          name: body
-          required: true
-          schema:
-            type: object
-            properties:
-              phone:
-                type: string
-              profile_photo:
-                type: string
-                format: binary
-      responses:
-        '200':
-          description: Profile updated successfully
-    delete:
-      summary: Delete user account
-      description: Deletes a user's account.
-      parameters:
-        - in: path
-          name: username
-          required: true
-          type: string
-      responses:
-        '204':
-          description: User account deleted successfully
-        '404':
-          description: User not found
-  /habits/{username}:
-    post:
-      summary: Create a new habit
-      description: Creates a new habit for the specified user.
-      parameters:
-        - in: path
-          name: username
-          required: true
-          type: string
-        - in: body
-          name: body
-          required: true
-          schema:
-            type: object
-            properties:
-              habit:
-                type: string
-            required:
-              - habit
-      responses:
-        '201':
-          description: Habit created successfully
-        '400':
-          description: Bad request
-  /habits/{username}/{habit_id}/detailed-habit:
-    patch:
-      summary: Update detailed habit
-      description: Adds or updates the detailed habit description.
-      parameters:
-        - in: path
-          name: username
-          required: true
-          type: string
-        - in: path
-          name: habit_id
-          required: true
-          type: string
-        - in: body
-          name: body
-          required: true
-          schema:
-            type: object
-            properties:
-              detailed_habit:
-                type: string
-      responses:
-        '200':
-          description: Detailed habit updated successfully
-        '400':
-          description: Bad request
-        '404':
-          description: Habit not found
-  /habits/{username}/{habit_id}/complete:
-    patch:
-      summary: Mark habit as complete
-      description: Marks a user's habit as complete and triggers a follow-up in 3 months.
-      parameters:
-        - in: path
-          name: username
-          required: true
-          type: string
-        - in: path
-          name: habit_id
-          required: true
-          type: string
-      responses:
-        '200':
-          description: Habit marked as complete successfully
-        '404':
-          description: User or habit not found
-  /team-members/{username}:
+  /habit/{username}:
     get:
-      summary: Get all team members
-      description: Retrieves all team members for a user.
+      summary: Get all habits for a user
+      description: Retrieves all habits associated with a specific user.
       parameters:
         - in: path
           name: username
@@ -194,10 +115,11 @@ paths:
           type: string
       responses:
         '200':
-          description: Team members retrieved successfully
+          description: Habits retrieved successfully
+  /teammember/{username}:
     post:
       summary: Add a new team member
-      description: Adds a new team member to a specific habit.
+      description: Adds a new team member for a user.
       parameters:
         - in: path
           name: username
@@ -231,12 +153,28 @@ paths:
           description: Team member added successfully
         '400':
           description: Bad request
+    get:
+      summary: Get all team members
+      description: Retrieves all team members for a user.
+      parameters:
+        - in: path
+          name: username
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Team members retrieved successfully
+  /teammember/{username}/{teammember_id}:
     put:
       summary: Update a team member
       description: Updates a team member's details.
       parameters:
         - in: path
           name: username
+          required: true
+          type: string
+        - in: path
+          name: teammember_id
           required: true
           type: string
         - in: body
@@ -267,33 +205,10 @@ paths:
           name: username
           required: true
           type: string
+        - in: path
+          name: teammember_id
+          required: true
+          type: string
       responses:
         '204':
           description: Team member deleted successfully
-  /feedback/{username}:
-    post:
-      summary: Submit feedback
-      description: Allows a team member to submit feedback for a habit.
-      parameters:
-        - in: path
-          name: username
-          required: true
-          type: string
-        - in: body
-          name: body
-          required: true
-          schema:
-            type: object
-            properties:
-              habit:
-                type: string
-              teamMember:
-                type: string
-              feedbackText:
-                type: string
-      responses:
-        '201':
-          description: Feedback submitted successfully
-        '400':
-          description: Bad request
-

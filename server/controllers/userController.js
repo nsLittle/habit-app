@@ -20,7 +20,6 @@ exports.getUserProfile = async (req, res) => {
 exports.updateUserProfile = async (req, res) => {
   try {
     const { username } = req.params;
-    const updates = req.body;
 
     console.log("Updating Profile for:", username);
     console.log("Update Data:", updates);
