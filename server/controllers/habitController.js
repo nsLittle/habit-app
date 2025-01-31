@@ -1,13 +1,17 @@
 const { Habit } = require('../models/Habit');
-const { User } = require('../models/User');
+const User = require('../models/User');
+
+console.log("User model:", User);
 
 exports.createHabit = async (req, res) => {
   try {
     console.log('Incoming request to create habit for:', req.params.username);
 
     const { username } = req.params;
-    const { habit } = req.body;
     console.log('Username:', username);
+
+    const { habit } = req.body;
+    console.log('Habit: ', habit);
 
     if (!habit) {
       return res.status(400).json({ message: 'Habit is required' });

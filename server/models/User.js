@@ -20,14 +20,8 @@ const UserSchema = new mongoose.Schema(
         message: "Password must have at least one uppercase letter, one lowercase letter, and one number."
       } 
     },
-    firstName: { 
-      type: String, 
-      required: true 
-    },
-    lastName: { 
-      type: String, 
-      required: true 
-    },
+    firstName: { type: String, required: true },
+    lastName: { type: String, required: true },
     email: { 
       type: String, 
       required: true, 
@@ -44,17 +38,12 @@ const UserSchema = new mongoose.Schema(
         message: "Profile picture must be a valid URL or an image file path (e.g., .jpg, .png)."
       } 
     },
-    habits: [{ 
-      type: mongoose.Schema.Types.ObjectId, 
-      ref: 'Habit' 
-    }],
-    teamMember: [{ 
-      type: mongoose.Schema.Types.ObjectId, 
-      ref: 'TeamMember' 
-    }]
+    habits: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Habit' }],
+    teamMember: [{ type: mongoose.Schema.Types.ObjectId, ref: 'TeamMember' }],
   },
   { timestamps: true }
 );
+
 
 UserSchema.virtual('fullName').get(function () {
   return `${this.firstName} ${this.lastName}`;
@@ -76,4 +65,4 @@ UserSchema.methods.comparePassword = async function (enteredPassword) {
 };
 
 const User = mongoose.model('User', UserSchema);
-module.exports = mongoose.model('User', UserSchema); 
+module.exports = User;

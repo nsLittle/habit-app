@@ -6,6 +6,6 @@ const router = express.Router();
 router.post('/:username', protect, createHabit);
 router.get('/:username', protect, getUserHabits);
 router.patch('/:username/:habit_id/detailed-habit', protect, updateDetailedHabit);
-router.patch('/:habit_id/complete', protect, completeHabit);
+router.patch('/:username/:habit_id/complete', protect, completeHabit);
 
 module.exports = router;

@@ -2,9 +2,9 @@ require("dotenv").config();
 
 const express = require("express");
 const cors = require("cors");
-const swaggerUi = require("swagger-ui-express");
-const YAML = require("yamljs");
-const swaggerDocument = YAML.load("./swagger.yaml");
+// const swaggerUi = require("swagger-ui-express");
+// const YAML = require("yamljs");
+// const swaggerDocument = YAML.load("server/swagger.yaml");
 const connectDB = require("./config/db");
 
 const app = express();
@@ -20,7 +20,7 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+// app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 app.get("/", (req, res) => {
   res.send("Habit App server is running!");
@@ -46,5 +46,5 @@ app.use('/notification', notificationRoutes);
 
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
-  console.log(`Swagger docs available at http://localhost:${PORT}/api-docs`);
+  // console.log(`Swagger docs available at http://localhost:${PORT}/api-docs`);
 });
