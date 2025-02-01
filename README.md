@@ -25,3 +25,7 @@ This is a Simple Native React Application designed to help users form lasting ha
 3. Type: cd server
 4. Type: npm run dev
 5. Type: npx expo start
+
+### Image Attribution
+
+habit by Rudez Studio from <a href="https://thenounproject.com/browse/icons/term/habit/" target="_blank" title="habit Icons">Noun Project</a> (CC BY 3.0)
