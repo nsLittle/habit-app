@@ -17,7 +17,16 @@ exports.signup = async (req, res) => {
       profilePic: req.body.profilePic,
     });
 
-    res.status(201).json({ message: "User created successfully", user });
+    const token = jwt.sign(
+      { userId: user._id, username: user.username }, 
+      process.env.JWT_SECRET,
+      { expiresIn: "1h" }
+    );
+    console.log('Token: ', token);
+    console.log('UserId: ', user._id);
+    console.log('Username: ', user.username);
+
+    res.status(201).json({ message: "User created successfully", user, token });
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
@@ -30,6 +39,10 @@ exports.login = async (req, res) => {
     const user = await User.findOne({ username });
     if (!user) return res.status(401).json({ message: "Invalid credentials" });
 
+    console.log('Username: ', user.username);
+    console.log('Password: ', user.password);
+    console.log('Entered Password: ', password);
+
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) return res.status(401).json({ message: "Invalid credentials" });
 
@@ -38,6 +51,8 @@ exports.login = async (req, res) => {
       process.env.JWT_SECRET,
       { expiresIn: "1h" }
     );
+
+    console.log('Token: ', token);
 
     res.status(200).json({
       message: "Login successful",
