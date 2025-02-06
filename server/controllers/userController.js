@@ -1,5 +1,16 @@
 const User = require('../models/User');
 
+exports.getAllUsernames = async (req, res) => {
+  try {
+    const users = await User.find({}, "username"); // Fetch all usernames
+    const usernames = users.map(user => user.username);
+    res.status(200).json({ usernames });
+  } catch (error) {
+    console.error("Error fetching usernames:", error.message);
+    res.status(500).json({ message: "Error fetching usernames" });
+  }
+};
+
 exports.getUserProfile = async (req, res) => {
   try {
     const { username } = req.params;

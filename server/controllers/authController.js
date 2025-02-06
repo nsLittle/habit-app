@@ -5,8 +5,9 @@ const bcrypt = require("bcryptjs");
 exports.signup = async (req, res) => {
   console.log("At signup!");
   try {
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(req.body.password, salt);
+    const hashedPassword = await bcrypt.hash(req.body.password, 10);
+    console.log("Entered Password: ", req.body.password);
+    console.log("Hashed Password: ", hashedPassword);
 
     const user = await User.create({
       username: req.body.username,
@@ -18,13 +19,14 @@ exports.signup = async (req, res) => {
     });
 
     const token = jwt.sign(
-      { userId: user._id, username: user.username }, 
+      { userId: user._id, username: user.username, password: user.password }, 
       process.env.JWT_SECRET,
       { expiresIn: "1h" }
     );
     console.log('Token: ', token);
     console.log('UserId: ', user._id);
     console.log('Username: ', user.username);
+    console.log('Password: ', user.password);
 
     res.status(201).json({ message: "User created successfully", user, token });
   } catch (error) {
@@ -35,16 +37,24 @@ exports.signup = async (req, res) => {
 exports.login = async (req, res) => {
   try {
     const { username, password } = req.body;
+    console.log('Username: ', username);
+    console.log('Password: ', password);
 
     const user = await User.findOne({ username });
+    console.log('User found:', user);
     if (!user) return res.status(401).json({ message: "Invalid credentials" });
 
     console.log('Username: ', user.username);
-    console.log('Password: ', user.password);
+    console.log('Saved Password: ', user.password);
     console.log('Entered Password: ', password);
 
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) return res.status(401).json({ message: "Invalid credentials" });
+    console.log("Comparing passwords...");
+    if (user.password === password) {
+      console.log('It is a match');
+    }
+    // const isMatch = await bcrypt.compare(password, user.password);
+    // console.log("Password match result:", isMatch);
+    // if (!isMatch) return res.status(401).json({ message: "Invalid credentials" });
 
     const token = jwt.sign(
       { id: user._id, username: user.username }, 

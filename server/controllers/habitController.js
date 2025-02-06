@@ -18,6 +18,7 @@ exports.createHabit = async (req, res) => {
     }
 
     const user = await User.findOne({ username });
+    console.log('User: ', user);
 
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
@@ -28,8 +29,11 @@ exports.createHabit = async (req, res) => {
       user: user._id,
     });
 
+    console.log('New Habit: ', newHabit);
+
     res.status(201).json({
-      habit_id: newHabit._id,
+      habit,
+      habit_id: newHabit.user._id,
       message: 'Habit created successfully',
     });
   } catch (error) {

@@ -1,24 +1,21 @@
 ## TO DO
 
-1. CreateAccountScreen => mobile => missing input field placeholder
-2. ~~CreateAccountScreen => BOTH => add infoIcon w/i profilePic input field (*insert image url)~~
-3. ~~CreateAccountScreen => make icon fields fill Green on input fill~~
-
-1. ~~LoginScreen => mobile => input field too wide~~
-2. LoginScreen => mobile => missing input field placeholder
-3. ~~LoginScreen => browser => input field not centered~~
-4. ~~LoginScreen => browwer => icon to be placed within input field~~
-
 1. CreateHabitScreen => character limit?
+2. LoginScreen => forgot password link to reset
+
 
 ## SCREENS 
 
-1. ProfileScreen
-2. EditAccountScreen
-
-3. ~~CreateHabitScreen => u/i~~
-4. ~~CreateHabitScreen => saves to b/e~~
-5. HabitDescriptionScreen => u/ei
-6. HabitDescriptionScreen => saves to b/e
-7. TeamInviteScreen
-6. 
+1. HabitDescriptionScreen
+2. TeamInviteScreen
+3. AddTeamMemberScreen
+4. EditTeamMemberScreen
+5. CadenceScreen
+6. ReminderScreen
+7. ReviewScreen
+8. FeedbackLandingScreen
+9. FeedbackRatingScreen
+10. ThankYouRatingScreen
+11. FeedbackTextScreen
+12. Profile Screen
+13. Edit Profile Screen
