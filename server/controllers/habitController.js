@@ -6,19 +6,25 @@ console.log("User model:", User);
 exports.createHabit = async (req, res) => {
   try {
     console.log('Incoming request to create habit for:', req.params.username);
+    console.log('Reqeust Body: ', req.body);
 
     const { username } = req.params;
     console.log('Username:', username);
 
-    const { habit } = req.body;
+    const { habit, userId } = req.body;
     console.log('Habit: ', habit);
+    console.log('User Id: ', userId);
 
     if (!habit) {
       return res.status(400).json({ message: 'Habit is required' });
     }
 
-    const user = await User.findOne({ username });
-    console.log('User: ', user);
+    let user;
+    if (userId) {
+      user = await User.findById(userId);
+    } else {
+      user = await User.findOne({ username });
+    }
 
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
@@ -32,8 +38,8 @@ exports.createHabit = async (req, res) => {
     console.log('New Habit: ', newHabit);
 
     res.status(201).json({
-      habit,
-      habit_id: newHabit.user._id,
+      habit: newHabit.habit,
+      habitId: newHabit._id,
       message: 'Habit created successfully',
     });
   } catch (error) {
@@ -65,16 +71,21 @@ exports.getUserHabits = async (req, res) => {
 
 exports.updateDetailedHabit = async (req, res) => {
   try {
-    const { username, habit_id } = req.params;
-    console.log('Updating Habit:', habit_id, 'for User:', username);
+    const { username, habitId } = req.params;
+    console.log('Updating Habit:', habitId, 'for User:', username);
 
     const user = await User.findOne({ username });
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
 
+    const habit = await Habit.findOne({ user });
+    if (!habit) {
+      return res.status(404).json({ message: 'Habit not found' });
+    }
+
     const updatedHabit = await Habit.findOneAndUpdate(
-      { _id: habit_id, user: user._id },
+      { _id: habit._id, user: user._id },
       req.body,
       { new: true }
     );
@@ -87,16 +98,18 @@ exports.updateDetailedHabit = async (req, res) => {
       updatedHabit,
     });
   } catch (error) {
+
+
     res.status(400).json({ error: error.message });
   }
 };
 
 exports.completeHabit = async (req, res) => {
   try {
-    const { habit_id } = req.params;
-
+    const { habitId } = req.params;
+    
     const completedHabit = await Habit.findByIdAndUpdate(
-      habit_id,
+      habitId,
       { completed: true },
       { new: true }
     );

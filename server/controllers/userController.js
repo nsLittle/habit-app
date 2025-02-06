@@ -2,7 +2,7 @@ const User = require('../models/User');
 
 exports.getAllUsernames = async (req, res) => {
   try {
-    const users = await User.find({}, "username"); // Fetch all usernames
+    const users = await User.find({}, "username");
     const usernames = users.map(user => user.username);
     res.status(200).json({ usernames });
   } catch (error) {
