@@ -1,22 +1,22 @@
-const { Habit } = require('../models/Habit');
-const User = require('../models/User');
+const { Habit } = require("../models/Habit");
+const User = require("../models/User");
 
 console.log("User model:", User);
 
 exports.createHabit = async (req, res) => {
   try {
-    console.log('Incoming request to create habit for:', req.params.username);
-    console.log('Reqeust Body: ', req.body);
+    console.log("Incoming request to create habit for:", req.params.username);
+    console.log("Reqeust Body: ", req.body);
 
     const { username } = req.params;
-    console.log('Username:', username);
+    console.log("Username:", username);
 
     const { habit, userId } = req.body;
-    console.log('Habit: ', habit);
-    console.log('User Id: ', userId);
+    console.log("Habit: ", habit);
+    console.log("User Id: ", userId);
 
     if (!habit) {
-      return res.status(400).json({ message: 'Habit is required' });
+      return res.status(400).json({ message: "Habit is required" });
     }
 
     let user;
@@ -27,7 +27,7 @@ exports.createHabit = async (req, res) => {
     }
 
     if (!user) {
-      return res.status(404).json({ message: 'User not found' });
+      return res.status(404).json({ message: "User not found" });
     }
 
     const newHabit = await Habit.create({
@@ -35,53 +35,53 @@ exports.createHabit = async (req, res) => {
       user: user._id,
     });
 
-    console.log('New Habit: ', newHabit);
+    console.log("New Habit: ", newHabit);
 
     res.status(201).json({
       habit: newHabit.habit,
       habitId: newHabit._id,
-      message: 'Habit created successfully',
+      message: "Habit created successfully",
     });
   } catch (error) {
-    res.status(500).json({ message: 'Server error', error: error.message });
+    res.status(500).json({ message: "Server error", error: error.message });
   }
 };
 
 exports.getUserHabits = async (req, res) => {
   try {
     const { username } = req.params;
-    console.log('Fetching habits for:', username);
+    console.log("Fetching habits for:", username);
 
     const user = await User.findOne({ username });
 
     if (!user) {
-      return res.status(404).json({ message: 'User not found' });
+      return res.status(404).json({ message: "User not found" });
     }
 
     const habits = await Habit.find({ user: user._id });
 
     res.status(200).json({
-      message: 'Habits retrieved successfully',
+      message: "Habits retrieved successfully",
       habits,
     });
   } catch (error) {
-    res.status(500).json({ message: 'Server error', error: error.message });
+    res.status(500).json({ message: "Server error", error: error.message });
   }
 };
 
 exports.updateDetailedHabit = async (req, res) => {
   try {
     const { username, habitId } = req.params;
-    console.log('Updating Habit:', habitId, 'for User:', username);
+    console.log("Updating Habit:", habitId, "for User:", username);
 
     const user = await User.findOne({ username });
     if (!user) {
-      return res.status(404).json({ message: 'User not found' });
+      return res.status(404).json({ message: "User not found" });
     }
 
     const habit = await Habit.findOne({ user });
     if (!habit) {
-      return res.status(404).json({ message: 'Habit not found' });
+      return res.status(404).json({ message: "Habit not found" });
     }
 
     const updatedHabit = await Habit.findOneAndUpdate(
@@ -90,16 +90,14 @@ exports.updateDetailedHabit = async (req, res) => {
       { new: true }
     );
     if (!updatedHabit) {
-      return res.status(404).json({ message: 'Habit not found' });
+      return res.status(404).json({ message: "Habit not found" });
     }
 
     res.status(200).json({
-      message: 'Detailed habit updated successfully',
+      message: "Detailed habit updated successfully",
       updatedHabit,
     });
   } catch (error) {
-
-
     res.status(400).json({ error: error.message });
   }
 };
@@ -107,7 +105,7 @@ exports.updateDetailedHabit = async (req, res) => {
 exports.completeHabit = async (req, res) => {
   try {
     const { habitId } = req.params;
-    
+
     const completedHabit = await Habit.findByIdAndUpdate(
       habitId,
       { completed: true },
@@ -115,14 +113,14 @@ exports.completeHabit = async (req, res) => {
     );
 
     if (!completedHabit) {
-      return res.status(404).json({ message: 'Habit not found' });
+      return res.status(404).json({ message: "Habit not found" });
     }
 
     res.status(200).json({
-      message: 'Habit marked as complete successfully',
+      message: "Habit marked as complete successfully",
       completedHabit,
     });
   } catch (error) {
-    res.status(500).json({ message: 'Server error', error: error.message });
+    res.status(500).json({ message: "Server error", error: error.message });
   }
 };
