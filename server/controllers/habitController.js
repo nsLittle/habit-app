@@ -50,7 +50,7 @@ exports.createHabit = async (req, res) => {
 exports.getUserHabits = async (req, res) => {
   try {
     const { username } = req.params;
-    console.log("Fetching habits for:", username);
+    console.log("Fetching habits for: ", username);
 
     const user = await User.findOne({ username });
 
@@ -63,6 +63,28 @@ exports.getUserHabits = async (req, res) => {
     res.status(200).json({
       message: "Habits retrieved successfully",
       habits,
+    });
+  } catch (error) {
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
+};
+
+exports.getDetailedHabit = async (req, res) => {
+  try {
+    const { username, habitId } = req.params;
+    console.log("Fetching descriptions for: ", username);
+
+    const user = await User.findOne({ username });
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found!" });
+    }
+
+    const descriptions = await Habit.find({ user: user._id });
+
+    res.status(200).json({
+      message: "Descpription retrieved successfully",
+      descriptions,
     });
   } catch (error) {
     res.status(500).json({ message: "Server error", error: error.message });
