@@ -2,12 +2,20 @@
 
 ## SCREENS
 
-1. ~~EditTeamMemberScreen
-2. ~~CadenceScreen~~
-3. ReminderScreen
-4. ReviewScreen
-5. FeedbackLandingScreen
-6. FeedbackRatingScreen
-7. ThankYouRatingScreen
-8. FeedbackTextScreen
-9. ~~EditAccountScreen
+1. ReminderScreen
+2. ReviewScreen
+3. FeedbackLandingScreen
+4. FeedbackRatingScreen
+5. ThankYouRatingScreen
+6. FeedbackTextScreen
+
+## CLEANUP:
+
+### ProfileScreen
+
+1. Email => font size === name
+2. Name + Email => make in to column
+3. Icons => make into row
+4. onEmail => create subject + body template
+
+### TeamInviteScreen
