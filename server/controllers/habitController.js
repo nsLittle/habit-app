@@ -91,7 +91,7 @@ exports.getDetailedHabit = async (req, res) => {
   }
 };
 
-exports.updateDetailedHabit = async (req, res) => {
+exports.editedDetailedHabit = async (req, res) => {
   try {
     const { username, habitId } = req.params;
     console.log("Updating Habit:", habitId, "for User:", username);
@@ -144,5 +144,43 @@ exports.completeHabit = async (req, res) => {
     });
   } catch (error) {
     res.status(500).json({ message: "Server error", error: error.message });
+  }
+};
+
+exports.saveReminder = async (req, res) => {
+  try {
+    const { username, habitId } = req.params;
+    console.log("Saving Reminder for Habit:", habitId, "User:", username);
+
+    // Find user by username
+    const user = await User.findOne({ username });
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // Find habit by habitId and user
+    const habit = await Habit.findOne({ _id: habitId, user: user._id });
+    if (!habit) {
+      return res.status(404).json({ message: "Habit not found" });
+    }
+
+    // Update the habit with the reminder details
+    const updatedHabit = await Habit.findByIdAndUpdate(
+      habitId,
+      { $set: { reminder: req.body } },
+      { new: true, runValidators: true }
+    );
+
+    if (!updatedHabit) {
+      return res.status(500).json({ message: "Failed to save reminder" });
+    }
+
+    res.status(200).json({
+      message: "Reminder saved successfully",
+      updatedHabit,
+    });
+  } catch (error) {
+    console.error("Error saving reminder:", error);
+    res.status(500).json({ error: error.message });
   }
 };

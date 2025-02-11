@@ -2,12 +2,13 @@
 
 ## SCREENS
 
-1. ReminderScreen
-2. ReviewScreen
-3. FeedbackLandingScreen
-4. FeedbackRatingScreen
-5. ThankYouRatingScreen
-6. FeedbackTextScreen
+1. ~~EditTeamMemberScreen
+2. ~~ReminderScreen
+3. ReviewScreen
+4. FeedbackLandingScreen
+5. FeedbackRatingScreen
+6. ThankYouRatingScreen
+7. FeedbackTextScreen
 
 ## CLEANUP:
 

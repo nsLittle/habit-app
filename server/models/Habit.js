@@ -5,10 +5,15 @@ const HabitSchema = new mongoose.Schema(
     habit: { type: String, required: true },
     description: { type: String, required: false },
     reminders: {
-      type: String,
-      enum: ["daily", "weekly", "monthly"],
-      required: true,
-      default: "weekly",
+      isReminderEnabled: { type: Boolean, default: false },
+      isEmailReminderEnabled: { type: Boolean, default: false },
+      isTextReminderEnabled: { type: Boolean, default: false },
+      selectedDays: { type: [String], default: [] }, // Stores days like ["M", "W", "F"]
+      selectedTime: {
+        hour: { type: Number, default: 0 },
+        minute: { type: Number, default: 0 },
+        second: { type: Number, default: 0 },
+      },
     },
     feedbackCadence: {
       type: String,

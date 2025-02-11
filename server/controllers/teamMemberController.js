@@ -81,18 +81,20 @@ exports.updateTeamMember = async (req, res) => {
     console.log("Team Member ID:", teamMember_id);
 
     const user = await User.findOne({ username });
+    console.log("User: ", user);
 
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
 
     if (!mongoose.Types.ObjectId.isValid(teamMember_id)) {
+      console.log("Invalid teamMember_id format");
       return res.status(400).json({ message: "Invalid teamMember_id format" });
     }
 
     const teamMember = await TeamMember.findOne({
       _id: teamMember_id,
-      user: user._id,
+      user: user,
     });
     if (!teamMember) {
       return res.status(404).json({ message: "Team member not found" });
@@ -103,6 +105,8 @@ exports.updateTeamMember = async (req, res) => {
       req.body,
       { new: true, runValidators: true }
     );
+
+    console.log("Updated team member:", updatedTeamMember);
 
     if (!updatedTeamMember) {
       return res.status(404).json({ message: "Team member not updated" });
